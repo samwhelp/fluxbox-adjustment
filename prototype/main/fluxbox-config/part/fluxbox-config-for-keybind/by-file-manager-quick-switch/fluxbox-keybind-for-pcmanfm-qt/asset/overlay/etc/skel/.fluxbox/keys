@@ -497,7 +497,7 @@ Mod1 Shift d :Exec rofi -show drun -show-icons
 ##
 
 Mod1 Shift f :Exec thunar
-Mod1 Shift b :Exec firefox
+Mod1 Shift b :Exec firefox --new-tab about:blank
 Mod1 Shift g :Exec pcmanfm-qt
 Mod1 Shift e :Exec featherpad
 
