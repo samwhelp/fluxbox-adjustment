@@ -1,0 +1,242 @@
+#!/usr/bin/env bash
+
+
+
+
+##
+## ## Init
+##
+
+REF_BASE_DIR_PATH="$(cd -- "$(dirname -- "${0}")" ; pwd)"
+REF_PLAN_DIR_PATH="${REF_BASE_DIR_PATH}"
+#echo "${THE_BASE_DIR_PATH}"
+
+
+
+
+##
+## ## Main / Debug
+##
+
+DEFAULT_IS_DEBUG="false"
+IS_DEBUG="${IS_DEBUG:=$DEFAULT_IS_DEBUG}"
+
+
+##
+## ## Main / Util
+##
+
+util_error_echo () {
+	echo "${@}" 1>&2
+}
+
+util_debug_echo () {
+
+	if is_debug; then
+		echo "${@}" 1>&2
+	fi
+
+}
+
+is_debug () {
+
+	if [[ "${IS_DEBUG}" == "true" ]]; then
+		return 0
+	fi
+
+	return 1
+
+}
+
+is_not_debug () {
+
+	! is_debug
+
+}
+
+
+##
+## ## Main / Util / Command
+##
+
+is_function_exist () {
+
+	if type -p "${1}" > /dev/null; then
+		return 0
+	else
+		return 1
+	fi
+
+}
+
+is_command_exist () {
+
+	if [ -x "$(command -v ${1})" ]; then
+		return 0
+	else
+		return 1
+	fi
+
+}
+
+
+##
+## ## Main / Util / Process
+##
+
+util_stop_all ()  {
+
+	if is_command_exist 'killall'; then
+		util_stop_all_by_killall "${1}"
+		return 0
+	fi
+
+	if is_command_exist 'pkill'; then
+		util_stop_all_by_pkill "${1}"
+		return 0
+	fi
+
+	return 0
+
+}
+
+util_stop_all_by_pkill () {
+
+	if pkill "${1}"; then
+		return 0
+	fi
+
+	return 0
+
+}
+
+util_stop_all_by_killall () {
+
+	if killall -q -9 "${1}"; then
+		return 0
+	fi
+
+	return 0
+
+}
+
+
+
+
+##
+## ## Module / Start / policykit
+##
+
+mod_policykit_start_portal () {
+
+	mod_policykit_start_use_lxqt_policykit_agent
+
+	return 0
+}
+
+mod_policykit_start_use_lxqt_policykit_agent () {
+
+	util_stop_all lxqt-policykit-agent
+
+	is_command_exist lxqt-policykit-agent && lxqt-policykit-agent &
+
+	return 0
+}
+
+
+##
+## ## Module / Start / volume_control_applet
+##
+
+mod_volume_control_applet_start_portal () {
+
+	mod_volume_control_applet_start_use_mate_volume_control_status_icon
+
+	return 0
+}
+
+mod_volume_control_applet_start_use_mate_volume_control_status_icon () {
+
+	util_stop_all mate-volume-control-status-icon
+
+	is_command_exist mate-volume-control-status-icon && mate-volume-control-status-icon &
+
+	return
+}
+
+
+##
+## ## Module / Start / network_applet
+##
+
+mod_network_applet_start_portal () {
+
+	mod_network_applet_start_use_nm_applet
+
+	return 0
+}
+
+mod_network_applet_start_use_nm_applet () {
+
+	util_stop_all nm-applet
+
+	is_command_exist nm-applet && nm-applet &
+
+	return 0
+}
+
+
+##
+## ## Module / Start / bluetooth_applet
+##
+
+mod_bluetooth_applet_start_portal () {
+
+	mod_bluetooth_applet_start_use_blueman_applet
+
+	return 0
+}
+
+mod_bluetooth_applet_start_use_blueman_applet () {
+
+	util_stop_all blueman-applet
+
+	is_command_exist blueman-applet && blueman-applet &
+
+	return 0
+}
+
+
+
+
+##
+## ## Model / Start
+##
+
+model_start () {
+
+	mod_policykit_start_portal
+
+	mod_volume_control_applet_start_portal
+
+	mod_network_applet_start_portal
+
+	mod_bluetooth_applet_start_portal
+
+	return 0
+}
+
+
+
+
+##
+## ## Main / Start
+##
+
+__main__ () {
+
+	model_start "${@}"
+
+}
+
+__main__ "${@}"

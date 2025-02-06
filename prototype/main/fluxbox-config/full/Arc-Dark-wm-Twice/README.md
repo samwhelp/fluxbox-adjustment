@@ -35,6 +35,8 @@
 | [~/.fluxbox/init](./asset/overlay/etc/skel/.fluxbox/init) |
 | [~/.fluxbox/keys](./asset/overlay/etc/skel/.fluxbox/keys) |
 | [~/.fluxbox/overlay](./asset/overlay/etc/skel/.fluxbox/overlay) |
+| [~/.fluxbox/startup](./asset/overlay/etc/skel/.fluxbox/startup) |
+| [~/.fluxbox/startup-module](./asset/overlay/etc/skel/.fluxbox/startup-module) |
 
 
 ### default-cursor-theme
