@@ -8,6 +8,31 @@
 
 
 ##
+## ## Package / Fluxbox
+##
+
+fluxbox
+
+rofi
+
+feh
+
+tint2
+
+picom
+
+xsettingsd
+
+obsession
+
+mate-media
+
+lxqt-policykit
+
+
+
+
+##
 ## ## Package / Tool
 ##
 

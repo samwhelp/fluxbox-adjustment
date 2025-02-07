@@ -65,7 +65,7 @@ session.screen0.window.focus.alpha:	240
 session.screen0.windowMenu:	~/.fluxbox/windowmenu
 session.screen0.windowPlacement:	RowMinOverlapPlacement
 session.screen0.window.unfocus.alpha:	250
-session.screen0.workspaceNames:	Workspace 1,Workspace 2,Workspace 3,Workspace 4,
+session.screen0.workspaceNames:	File,Edit,Web,Term
 session.screen0.workspaces:	4
 session.screen0.workspacewarping:	true
 session.slitlistFile:	~/.fluxbox/slitlist

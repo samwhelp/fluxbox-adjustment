@@ -124,17 +124,30 @@ util_stop_all_by_killall () {
 
 
 ##
-## ## Module / Start / policykit
+## ## Main / Path
 ##
 
-mod_policykit_start_portal () {
+REF_MAIN_HELPER_DIR_NAME="helper"
+REF_MAIN_HELPER_DIR_PATH="${REF_PLAN_DIR_PATH}/${REF_MAIN_HELPER_DIR_NAME}"
 
-	mod_policykit_start_use_lxqt_policykit_agent
+REF_MASTER_STYLE_DIR_NAME="style"
+REF_MASTER_STYLE_DIR_PATH="${REF_MAIN_HELPER_DIR_PATH}/${REF_MASTER_STYLE_DIR_NAME}"
+
+
+
+
+##
+## ## Module / Applet / policykit
+##
+
+mod_component_policykit_start_portal () {
+
+	mod_component_policykit_start_use_lxqt_policykit_agent
 
 	return 0
 }
 
-mod_policykit_start_use_lxqt_policykit_agent () {
+mod_component_policykit_start_use_lxqt_policykit_agent () {
 
 	util_stop_all lxqt-policykit-agent
 
@@ -145,17 +158,17 @@ mod_policykit_start_use_lxqt_policykit_agent () {
 
 
 ##
-## ## Module / Start / volume_control_applet
+## ## Module / Applet / volume_control
 ##
 
-mod_volume_control_applet_start_portal () {
+mod_applet_volume_control_start_portal () {
 
-	mod_volume_control_applet_start_use_mate_volume_control_status_icon
+	mod_applet_volume_control_start_use_mate_volume_control_status_icon
 
 	return 0
 }
 
-mod_volume_control_applet_start_use_mate_volume_control_status_icon () {
+mod_applet_volume_control_start_use_mate_volume_control_status_icon () {
 
 	util_stop_all mate-volume-control-status-icon
 
@@ -166,17 +179,17 @@ mod_volume_control_applet_start_use_mate_volume_control_status_icon () {
 
 
 ##
-## ## Module / Start / network_applet
+## ## Module / Applet / network_manager
 ##
 
-mod_network_applet_start_portal () {
+mod_applet_network_manager_start_portal () {
 
-	mod_network_applet_start_use_nm_applet
+	mod_applet_network_manager_start_use_nm_applet
 
 	return 0
 }
 
-mod_network_applet_start_use_nm_applet () {
+mod_applet_network_manager_start_use_nm_applet () {
 
 	util_stop_all nm-applet
 
@@ -187,17 +200,17 @@ mod_network_applet_start_use_nm_applet () {
 
 
 ##
-## ## Module / Start / bluetooth_applet
+## ## Module / Applet / bluetooth_manager
 ##
 
-mod_bluetooth_applet_start_portal () {
+mod_applet_bluetooth_manager_start_portal () {
 
-	mod_bluetooth_applet_start_use_blueman_applet
+	mod_applet_bluetooth_manager_start_use_blueman_applet
 
 	return 0
 }
 
-mod_bluetooth_applet_start_use_blueman_applet () {
+mod_applet_bluetooth_manager_start_use_blueman_applet () {
 
 	util_stop_all blueman-applet
 
@@ -210,18 +223,129 @@ mod_bluetooth_applet_start_use_blueman_applet () {
 
 
 ##
+## ## Module / Component / panel
+##
+
+mod_component_panel_start_portal () {
+
+	mod_component_panel_start_use_tint2
+
+	return 0
+}
+
+mod_component_panel_start_use_tint2 () {
+
+	local tint2_dir_path="${REF_MASTER_STYLE_DIR_PATH}/tint2"
+
+	util_stop_all tint2
+
+	if is_command_exist tint2; then
+
+		tint2 -c "${tint2_dir_path}/top_bottom_panel/tint2rc_top" &
+		tint2 -c "${tint2_dir_path}/top_bottom_panel/tint2rc_bottom" &
+
+	fi
+
+	return 0
+}
+
+
+
+
+##
+## ## Module / Component / panel
+##
+
+mod_component_compositor_start_portal () {
+
+	mod_component_compositor_start_use_picom
+
+	return 0
+}
+
+mod_component_compositor_start_use_picom () {
+
+	local picom_dir_path="${REF_MASTER_STYLE_DIR_PATH}/picom"
+
+	util_stop_all picom
+
+	if is_command_exist picom; then
+
+		picom --config "${picom_dir_path}/picom.conf" &
+
+	fi
+
+	return 0
+}
+
+
+
+
+##
+## ## Module / Component / xsettings
+##
+
+mod_component_xsettings_start_portal () {
+
+	mod_component_xsettings_start_use_xsettingsd
+
+	return 0
+}
+
+mod_component_xsettings_start_use_xsettingsd () {
+
+	local xsettingsd_dir_path="${REF_MASTER_STYLE_DIR_PATH}/xsettingsd"
+
+	util_stop_all xsettingsd
+
+	if is_command_exist xsettingsd; then
+
+		xsettingsd --config "${xsettingsd_dir_path}/xsettingsd.conf" &
+
+	fi
+
+	return 0
+}
+
+
+
+
+
+
+##
 ## ## Model / Start
 ##
 
 model_start () {
 
-	mod_policykit_start_portal
 
-	mod_volume_control_applet_start_portal
+	##
+	## ## Component
+	##
 
-	mod_network_applet_start_portal
+	mod_component_policykit_start_portal
 
-	mod_bluetooth_applet_start_portal
+	#mod_component_panel_start_portal
+
+	mod_component_compositor_start_portal
+
+	mod_component_xsettings_start_portal
+
+
+
+
+	##
+	## ## Applet
+	##
+
+	mod_applet_volume_control_start_portal
+
+	mod_applet_network_manager_start_portal
+
+	mod_applet_bluetooth_manager_start_portal
+
+
+
 
 	return 0
 }
