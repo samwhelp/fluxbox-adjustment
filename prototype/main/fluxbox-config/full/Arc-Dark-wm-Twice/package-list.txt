@@ -13,6 +13,8 @@
 
 fluxbox
 
+lxqt-policykit
+
 rofi
 
 feh
@@ -25,9 +27,15 @@ xsettingsd
 
 obsession
 
+brightnessctl
+
 mate-media
 
-lxqt-policykit
+alsa-utils
+
+pamixer
+
+screengrab
 
 
 

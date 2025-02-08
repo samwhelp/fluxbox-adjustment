@@ -8,6 +8,39 @@
 
 
 ##
+## ## Package / Fluxbox
+##
+
+fluxbox
+
+lxqt-policykit
+
+rofi
+
+feh
+
+tint2
+
+picom
+
+xsettingsd
+
+obsession
+
+brightnessctl
+
+mate-media
+
+alsa-utils
+
+pamixer
+
+screengrab
+
+
+
+
+##
 ## ## Package / Tool
 ##
 
