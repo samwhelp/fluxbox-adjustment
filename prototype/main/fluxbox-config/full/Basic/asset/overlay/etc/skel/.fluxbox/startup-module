@@ -239,12 +239,16 @@ mod_component_panel_start_use_tint2 () {
 
 	util_stop_all tint2
 
-	if is_command_exist tint2; then
+	if ! is_command_exist tint2; then
 
-		tint2 -c "${tint2_dir_path}/top_bottom_panel/tint2rc_top" &
-		tint2 -c "${tint2_dir_path}/top_bottom_panel/tint2rc_bottom" &
+		return 0
 
 	fi
+
+
+	tint2 -c "${tint2_dir_path}/top_bottom_panel/tint2rc_top" &
+	tint2 -c "${tint2_dir_path}/top_bottom_panel/tint2rc_bottom" &
+
 
 	return 0
 }
@@ -269,11 +273,15 @@ mod_component_compositor_start_use_picom () {
 
 	util_stop_all picom
 
-	if is_command_exist picom; then
+	if ! is_command_exist picom; then
 
-		picom --config "${picom_dir_path}/picom.conf" &
+		return 0
 
 	fi
+
+
+	picom --config "${picom_dir_path}/picom.conf" &
+
 
 	return 0
 }
@@ -298,11 +306,48 @@ mod_component_xsettings_start_use_xsettingsd () {
 
 	util_stop_all xsettingsd
 
-	if is_command_exist xsettingsd; then
+	if ! is_command_exist xsettingsd; then
 
-		xsettingsd --config "${xsettingsd_dir_path}/xsettingsd.conf" &
+		return 0
 
 	fi
+
+
+	xsettingsd --config "${xsettingsd_dir_path}/xsettingsd.conf" &
+
+
+	return 0
+}
+
+
+
+
+##
+## ## Module / Component / wallpaper
+##
+
+mod_component_wallpaper_start_portal () {
+
+	return 0
+
+	mod_component_wallpaper_start_use_fbsetbg
+
+	return 0
+}
+
+mod_component_wallpaper_start_use_fbsetbg () {
+
+	util_stop_all fbsetbg
+
+	if ! is_command_exist fbsetbg; then
+
+		return 0
+
+	fi
+
+
+	fbsetbg "/usr/share/backgrounds/default.jpg" &
+
 
 	return 0
 }
@@ -316,7 +361,7 @@ mod_component_xsettings_start_use_xsettingsd () {
 ## ## Model / Start
 ##
 
-model_start () {
+model_start_by_custom () {
 
 
 	##
@@ -327,9 +372,11 @@ model_start () {
 
 	#mod_component_panel_start_portal
 
-	#mod_component_compositor_start_portal
+	mod_component_compositor_start_portal
 
-	#mod_component_xsettings_start_portal
+	mod_component_xsettings_start_portal
+
+	mod_component_wallpaper_start_portal
 
 
 
@@ -350,6 +397,81 @@ model_start () {
 	return 0
 }
 
+
+model_start_by_xdg_autostart_extra () {
+
+
+	##
+	## ## Component
+	##
+
+	mod_component_policykit_start_portal
+
+	#mod_component_panel_start_portal
+
+	mod_component_compositor_start_portal
+
+	mod_component_xsettings_start_portal
+
+	mod_component_wallpaper_start_portal
+
+
+
+
+	##
+	## ## Applet
+	##
+
+	mod_applet_volume_control_start_portal
+
+	#mod_applet_network_manager_start_portal
+
+	#mod_applet_bluetooth_manager_start_portal
+
+
+
+
+	return 0
+}
+
+model_start_by_xdg_autostart () {
+
+	##
+	## sudo apt-get install obsession
+	##
+
+
+
+
+	if is_command_exist xdg-autostart; then
+
+		model_start_by_xdg_autostart_extra
+
+		xdg-autostart &
+
+		return 0
+
+	else
+
+		model_start_by_custom
+
+		return 0
+	fi
+
+
+
+
+	return 0
+}
+
+model_start () {
+
+	#model_start_by_custom
+
+	model_start_by_xdg_autostart
+
+	return 0
+}
 
 
 
