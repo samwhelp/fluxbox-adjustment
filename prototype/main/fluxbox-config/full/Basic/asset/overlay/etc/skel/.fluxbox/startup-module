@@ -326,16 +326,24 @@ mod_component_xsettings_start_use_xsettingsd () {
 ## ## Module / Component / wallpaper
 ##
 
+DEFAULT_WALLPAPER_FILE_PATH="/usr/share/backgrounds/default.jpg"
+REF_WALLPAPER_FILE_PATH="${REF_WALLPAPER_FILE_PATH:=$DEFAULT_WALLPAPER_FILE_PATH}"
+
+
 mod_component_wallpaper_start_portal () {
+
+	mod_component_wallpaper_start_use_feh
 
 	return 0
 
-	mod_component_wallpaper_start_use_fbsetbg
+	#mod_component_wallpaper_start_use_fbsetbg
 
 	return 0
 }
 
 mod_component_wallpaper_start_use_fbsetbg () {
+
+	local wallpaper_file_path="${REF_WALLPAPER_FILE_PATH}"
 
 	util_stop_all fbsetbg
 
@@ -346,13 +354,35 @@ mod_component_wallpaper_start_use_fbsetbg () {
 	fi
 
 
-	fbsetbg "/usr/share/backgrounds/default.jpg" &
+	fbsetbg "${wallpaper_file_path}" &
 
 
 	return 0
 }
 
+mod_component_wallpaper_start_use_feh () {
 
+	local wallpaper_file_path="${REF_WALLPAPER_FILE_PATH}"
+
+	local fehbg_file_path="${HOME}/.fehbg"
+
+	if ! is_command_exist feh; then
+
+		return 0
+
+	fi
+
+
+	if ! [ -f "${fehbg_file_path}" ]; then
+		return 0
+	fi
+
+
+	sh "${fehbg_file_path}" &
+
+
+	return 0
+}
 
 
 
@@ -368,15 +398,15 @@ model_start_by_custom () {
 	## ## Component
 	##
 
+	#mod_component_wallpaper_start_portal
+
 	mod_component_policykit_start_portal
 
 	#mod_component_panel_start_portal
 
-	mod_component_compositor_start_portal
+	#mod_component_compositor_start_portal
 
-	mod_component_xsettings_start_portal
-
-	mod_component_wallpaper_start_portal
+	#mod_component_xsettings_start_portal
 
 
 
@@ -405,15 +435,15 @@ model_start_by_xdg_autostart_extra () {
 	## ## Component
 	##
 
+	#mod_component_wallpaper_start_portal
+
 	mod_component_policykit_start_portal
 
 	#mod_component_panel_start_portal
 
-	mod_component_compositor_start_portal
+	#mod_component_compositor_start_portal
 
-	mod_component_xsettings_start_portal
-
-	mod_component_wallpaper_start_portal
+	#mod_component_xsettings_start_portal
 
 
 
