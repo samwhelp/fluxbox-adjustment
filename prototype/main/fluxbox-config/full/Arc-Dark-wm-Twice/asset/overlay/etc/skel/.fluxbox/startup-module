@@ -332,11 +332,11 @@ REF_WALLPAPER_FILE_PATH="${REF_WALLPAPER_FILE_PATH:=$DEFAULT_WALLPAPER_FILE_PATH
 
 mod_component_wallpaper_start_portal () {
 
-	mod_component_wallpaper_start_use_feh
-
-	return 0
 
 	#mod_component_wallpaper_start_use_fbsetbg
+
+	#mod_component_wallpaper_start_use_feh
+
 
 	return 0
 }
