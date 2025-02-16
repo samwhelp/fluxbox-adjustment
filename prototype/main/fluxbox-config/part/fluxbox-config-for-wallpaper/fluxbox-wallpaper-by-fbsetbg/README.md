@@ -8,7 +8,7 @@
 
 | Config File Path |
 | --- |
-| [~/.fluxbox/init](./asset/overlay/etc/skel/.fluxbox/init) |
+| [~/.fluxbox/lastwallpaper](./asset/overlay/etc/skel/.fluxbox/lastwallpaper) |
 
 
 
