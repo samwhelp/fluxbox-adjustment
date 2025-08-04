@@ -1,0 +1,11 @@
+[begin] (fluxbox)
+	[exec] (File manager) {thunar}
+	[exec] (Web browser) {firefox}
+	[exec] (Terminal) {sakura}
+	[separator]
+	[submenu] (Apps)
+		[exec] (Search) {rofi -show drun}
+		[separator]
+		[include] (/etc/X11/fluxbox/fluxbox-menu)
+	[end]
+[end]
