@@ -1097,7 +1097,7 @@ Mod1 Shift bracketleft :Exec brightnessctl set 5%-
 ##
 ## ## amixer
 ##
-## run to install pamixer
+## run to install amixer
 ##
 ## ``` sh
 ## sudo apt-get install alsa-utils
