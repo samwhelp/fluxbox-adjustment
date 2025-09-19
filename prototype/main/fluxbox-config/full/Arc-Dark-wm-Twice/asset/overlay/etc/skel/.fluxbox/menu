@@ -1,7 +1,11 @@
 [begin] (fluxbox)
-	[exec] (File manager) {thunar}
-	[exec] (Web browser) {firefox}
+	[exec] (Search) {rofi -show drun}
+	[separator]
+	[exec] (File Manager) {thunar}
+	[exec] (Text Editor) {mousepad}
+	[exec] (Web Browser) {firefox --new-tab about:blank}
 	[exec] (Terminal) {sakura}
+	[exec] (Appearance) {lxappearance}
 	[separator]
 	[submenu] (Apps)
 		[exec] (Search) {rofi -show drun}
