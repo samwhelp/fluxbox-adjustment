@@ -257,7 +257,38 @@ mod_component_panel_start_use_tint2 () {
 
 
 ##
-## ## Module / Component / panel
+## ## Module / Component / dock
+##
+
+mod_component_dock_start_portal () {
+
+	mod_component_dock_start_use_plank
+
+	return 0
+}
+
+mod_component_dock_start_use_plank () {
+
+	util_stop_all plank
+
+	if ! is_command_exist plank; then
+
+		return 0
+
+	fi
+
+
+	plank &
+
+
+	return 0
+}
+
+
+
+
+##
+## ## Module / Component / compositor
 ##
 
 mod_component_compositor_start_portal () {
@@ -332,11 +363,11 @@ REF_WALLPAPER_FILE_PATH="${REF_WALLPAPER_FILE_PATH:=$DEFAULT_WALLPAPER_FILE_PATH
 
 mod_component_wallpaper_start_portal () {
 
-	mod_component_wallpaper_start_use_feh
-
-	return 0
 
 	#mod_component_wallpaper_start_use_fbsetbg
+
+	#mod_component_wallpaper_start_use_feh
+
 
 	return 0
 }
@@ -398,15 +429,17 @@ model_start_by_custom () {
 	## ## Component
 	##
 
-	#mod_component_wallpaper_start_portal
+	mod_component_wallpaper_start_portal
 
 	mod_component_policykit_start_portal
 
 	#mod_component_panel_start_portal
 
-	#mod_component_compositor_start_portal
+	mod_component_dock_start_portal
 
-	#mod_component_xsettings_start_portal
+	mod_component_compositor_start_portal
+
+	mod_component_xsettings_start_portal
 
 
 
@@ -435,15 +468,17 @@ model_start_by_xdg_autostart_extra () {
 	## ## Component
 	##
 
-	#mod_component_wallpaper_start_portal
+	mod_component_wallpaper_start_portal
 
 	mod_component_policykit_start_portal
 
 	#mod_component_panel_start_portal
 
-	#mod_component_compositor_start_portal
+	mod_component_dock_start_portal
 
-	#mod_component_xsettings_start_portal
+	mod_component_compositor_start_portal
+
+	mod_component_xsettings_start_portal
 
 
 
