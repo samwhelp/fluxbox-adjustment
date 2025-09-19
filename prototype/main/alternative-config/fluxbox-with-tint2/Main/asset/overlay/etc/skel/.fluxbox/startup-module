@@ -239,12 +239,16 @@ mod_component_panel_start_use_tint2 () {
 
 	util_stop_all tint2
 
-	if is_command_exist tint2; then
+	if ! is_command_exist tint2; then
 
-		tint2 -c "${tint2_dir_path}/top_bottom_panel/tint2rc_top" &
-		tint2 -c "${tint2_dir_path}/top_bottom_panel/tint2rc_bottom" &
+		return 0
 
 	fi
+
+
+	tint2 -c "${tint2_dir_path}/top_bottom_panel/tint2rc_top" &
+	tint2 -c "${tint2_dir_path}/top_bottom_panel/tint2rc_bottom" &
+
 
 	return 0
 }
@@ -253,7 +257,38 @@ mod_component_panel_start_use_tint2 () {
 
 
 ##
-## ## Module / Component / panel
+## ## Module / Component / dock
+##
+
+mod_component_dock_start_portal () {
+
+	mod_component_dock_start_use_plank
+
+	return 0
+}
+
+mod_component_dock_start_use_plank () {
+
+	util_stop_all plank
+
+	if ! is_command_exist plank; then
+
+		return 0
+
+	fi
+
+
+	plank &
+
+
+	return 0
+}
+
+
+
+
+##
+## ## Module / Component / compositor
 ##
 
 mod_component_compositor_start_portal () {
@@ -269,11 +304,15 @@ mod_component_compositor_start_use_picom () {
 
 	util_stop_all picom
 
-	if is_command_exist picom; then
+	if ! is_command_exist picom; then
 
-		picom --config "${picom_dir_path}/picom.conf" &
+		return 0
 
 	fi
+
+
+	picom --config "${picom_dir_path}/picom.conf" &
+
 
 	return 0
 }
@@ -298,16 +337,83 @@ mod_component_xsettings_start_use_xsettingsd () {
 
 	util_stop_all xsettingsd
 
-	if is_command_exist xsettingsd; then
+	if ! is_command_exist xsettingsd; then
 
-		xsettingsd --config "${xsettingsd_dir_path}/xsettingsd.conf" &
+		return 0
 
 	fi
+
+
+	xsettingsd --config "${xsettingsd_dir_path}/xsettingsd.conf" &
+
 
 	return 0
 }
 
 
+
+
+##
+## ## Module / Component / wallpaper
+##
+
+DEFAULT_WALLPAPER_FILE_PATH="/usr/share/backgrounds/default.jpg"
+REF_WALLPAPER_FILE_PATH="${REF_WALLPAPER_FILE_PATH:=$DEFAULT_WALLPAPER_FILE_PATH}"
+
+
+mod_component_wallpaper_start_portal () {
+
+
+	#mod_component_wallpaper_start_use_fbsetbg
+
+	#mod_component_wallpaper_start_use_feh
+
+
+	return 0
+}
+
+mod_component_wallpaper_start_use_fbsetbg () {
+
+	local wallpaper_file_path="${REF_WALLPAPER_FILE_PATH}"
+
+	util_stop_all fbsetbg
+
+	if ! is_command_exist fbsetbg; then
+
+		return 0
+
+	fi
+
+
+	fbsetbg "${wallpaper_file_path}" &
+
+
+	return 0
+}
+
+mod_component_wallpaper_start_use_feh () {
+
+	local wallpaper_file_path="${REF_WALLPAPER_FILE_PATH}"
+
+	local fehbg_file_path="${HOME}/.fehbg"
+
+	if ! is_command_exist feh; then
+
+		return 0
+
+	fi
+
+
+	if ! [ -f "${fehbg_file_path}" ]; then
+		return 0
+	fi
+
+
+	sh "${fehbg_file_path}" &
+
+
+	return 0
+}
 
 
 
@@ -316,16 +422,20 @@ mod_component_xsettings_start_use_xsettingsd () {
 ## ## Model / Start
 ##
 
-model_start () {
+model_start_by_custom () {
 
 
 	##
 	## ## Component
 	##
 
+	mod_component_wallpaper_start_portal
+
 	mod_component_policykit_start_portal
 
 	mod_component_panel_start_portal
+
+	#mod_component_dock_start_portal
 
 	mod_component_compositor_start_portal
 
@@ -350,6 +460,83 @@ model_start () {
 	return 0
 }
 
+
+model_start_by_xdg_autostart_extra () {
+
+
+	##
+	## ## Component
+	##
+
+	mod_component_wallpaper_start_portal
+
+	mod_component_policykit_start_portal
+
+	mod_component_panel_start_portal
+
+	#mod_component_dock_start_portal
+
+	mod_component_compositor_start_portal
+
+	mod_component_xsettings_start_portal
+
+
+
+
+	##
+	## ## Applet
+	##
+
+	mod_applet_volume_control_start_portal
+
+	#mod_applet_network_manager_start_portal
+
+	#mod_applet_bluetooth_manager_start_portal
+
+
+
+
+	return 0
+}
+
+model_start_by_xdg_autostart () {
+
+	##
+	## sudo apt-get install obsession
+	##
+
+
+
+
+	if is_command_exist xdg-autostart; then
+
+		model_start_by_xdg_autostart_extra
+
+		xdg-autostart &
+
+		return 0
+
+	else
+
+		model_start_by_custom
+
+		return 0
+	fi
+
+
+
+
+	return 0
+}
+
+model_start () {
+
+	#model_start_by_custom
+
+	model_start_by_xdg_autostart
+
+	return 0
+}
 
 
 
