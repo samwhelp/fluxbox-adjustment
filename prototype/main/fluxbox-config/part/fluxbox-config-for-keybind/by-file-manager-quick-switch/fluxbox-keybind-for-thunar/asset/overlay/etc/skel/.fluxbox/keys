@@ -524,9 +524,9 @@ Mod1 F2 :Exec fbrun
 ## ## Terminal
 ##
 
-Mod1 Return :Exec xfce4-terminal
-Mod1 Shift a :Exec xfce4-terminal
-Mod1 Control a :Exec sakura
+Mod1 Return :Exec sakura
+Mod1 Shift a :Exec sakura
+Mod1 Control a :Exec xfce4-terminal
 Mod1 Shift t :Exec qterminal
 Mod1 Control t :Exec lxterminal
 
@@ -552,12 +552,13 @@ Mod1 Shift d :Exec rofi -show drun -show-icons
 ##
 
 Mod1 Shift f :Exec thunar
+Mod1 Shift g :Exec pcmanfm
 Mod1 Shift b :Exec firefox --new-tab about:blank
-Mod1 Shift g :Exec pcmanfm-qt
-Mod1 Shift e :Exec featherpad
+Mod1 Shift e :Exec mousepad
 
 
 #Mod1 Shift s :Exec system-settings
+Mod1 Shift s :Exec lxappearance
 
 
 #Mod1 Shift v :Exec pavucontrol
